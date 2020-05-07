@@ -601,6 +601,14 @@ def make_plot(args, save=True, axis=None):
         pfile = call_plot('TSqheatprof',ham.profile,input, grid, output, z, stride=20, save=save, axis=axis)
         plots_created.append(pfile)
 
+    if ('DGqheatprof' in pview or 'all' in pview) and input.RT:
+        output.load_reshape(grid,['DGqheat'])
+        qheat = output.DGqheat
+        z = {'value': qheat, 'label': r'Double Gray Q heat (W m$^{-2}$)', 'name': 'DGqheatprof'}
+        pfile = call_plot('DGqheatprof',ham.profile,input, grid, output, z, stride=20, save=save, axis=axis)
+        plots_created.append(pfile)
+
+        
     if ('qheatprof' in pview or 'all' in pview):
         output.load_reshape(grid,['qheat'])
         qheat = output.qheat

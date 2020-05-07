@@ -140,6 +140,10 @@ private:
     double *flw_up_h;
     double *flw_dn_h;
 
+    double *qheat_d;
+    double *qheat_h;
+  
+
     // orbit/insolation properties
     bool   sync_rot       = true;     // is planet syncronously rotating?
     double mean_motion    = 1.991e-7; // orbital mean motion (rad/s)
