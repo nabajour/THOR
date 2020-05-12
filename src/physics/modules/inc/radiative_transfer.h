@@ -70,11 +70,18 @@ public:
 
     void print_config();
 
-  void set_qheat_scaling(const double & scaling ) { Qheat_scaling = scaling; };
+    void set_qheat_scaling(const double &scaling) {
+        Qheat_scaling = scaling;
+    };
+
+    // DEBUG: hack, move this here for print out in Alf.
+    double *qheat_d;
+    double *qheat_h;
+
 private:
-  // Scaling of Qheat, for slow ramp up or ramp down.
-  double Qheat_scaling = 1.0;
-  
+    // Scaling of Qheat, for slow ramp up or ramp down.
+    double Qheat_scaling = 1.0;
+
     // Config options
     double Tstar_config            = 4520;  // Star effective temperature [K]
     double planet_star_dist_config = 0.015; // Planet-star distance [au]
@@ -140,9 +147,6 @@ private:
     double *flw_up_h;
     double *flw_dn_h;
 
-    double *qheat_d;
-    double *qheat_h;
-  
 
     // orbit/insolation properties
     bool   sync_rot       = true;     // is planet syncronously rotating?
