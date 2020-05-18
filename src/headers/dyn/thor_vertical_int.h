@@ -45,6 +45,9 @@
 // 1.0     16/08/2017 Released version  (JM)
 //
 ////////////////////////////////////////////////////////////////////////
+
+#include "debug.h"
+
 __global__ void Vertical_Eq(double *Whs_d,
                             double *Ws_d,
                             double *pressures_d,
@@ -86,8 +89,9 @@ __global__ void Vertical_Eq(double *Whs_d,
     extern __shared__ double mem_shared[];
 
 
-    double *cc = (double *)mem_shared;
-    double *dd = (double *)&mem_shared[blockDim.x * nvi];
+    double *cc = (double *)mem_shared;                    // <- thomas alg vars
+    double *dd = (double *)&mem_shared[blockDim.x * nvi]; // <- thomas alg vars
+
 
     // double Cv = Cp - Rd;
     double C0;
@@ -95,7 +99,7 @@ __global__ void Vertical_Eq(double *Whs_d,
     double intt, intl, inttm, intlm;
     double dSpdz, dPdz;
     double rhohs;
-    double aa, bb;
+    double aa, bb; // <- thomas alg vars
     double t;
     double althl, alth, altht;
     double alt, altl;
@@ -108,6 +112,10 @@ __global__ void Vertical_Eq(double *Whs_d,
     double CRddl, CRddu, CRdd;
     double or2;
     double tor3;
+
+    // check that aa, cc smaller than bb (diag dom)
+    // or symetric positive definite ?
+    // add check by doing mult.
 
     if (id < num) {
         for (int lev = 1; lev < nv; lev++) {
@@ -169,7 +177,7 @@ __global__ void Vertical_Eq(double *Whs_d,
                 // get g*Cv/Rd and Cv/Rd/dt^2 at the current interface
                 CRdd = (CRddl * (alt - alth) + CRddu * (alth - altl)) / (alt - altl);
                 GCoR = (GCoRl * (alt - alth) + GCoRu * (alth - altl)) / (alt - altl);
-
+                //                printf("deltat: %g, CRddl: %g, CRddu: %g, CRdd: %g\n", deltat, CRddl, CRddu, CRdd);
                 cc[threadIdx.x * nvi + lev] = -dzph * or2 * hp - intt * (gp + GCoR - tor3 * hp);
 
                 if (NonHydro)
@@ -251,6 +259,7 @@ __global__ void Vertical_Eq(double *Whs_d,
                 xim = althl;
                 xip = alth;
 
+                // coefficients of original matrix
                 inttm = -(xi - xip) * dzm * dzh;
                 intlm = (xi - xim) * dzm * dzh;
 
@@ -266,6 +275,7 @@ __global__ void Vertical_Eq(double *Whs_d,
                     bb = (dzph + dzmh) * h + (intl - inttm) * (g + GCoR);
 
                 aa = -dzmh * hm + intlm * (gm + GCoR);
+                // end of coefficients
 
                 dSpdz = (Sp - Spl) * dzh;
                 dPdz  = (p - pl) * dzh;
@@ -321,7 +331,23 @@ __global__ void Vertical_Eq(double *Whs_d,
                 }
             } // End of if (DeepModel) physics computation
 
-
+#ifdef CHECK_THOR_VERTICAL_INT_THOMAS_DIAG_DOM
+            {
+                // check that matrix is diagonaly dominant
+                double cc_s = cc[threadIdx.x * nvi + lev];
+                if (!(fabs(bb) >= THOMAS_DIAG_DOM_FACTOR * (fabs(aa) + fabs(cc_s)))) {
+                    double sum = cc_s + bb + aa;
+                    printf("Thomas Diagonal Dominance Check failed at (grid_idx: %d, level: %d ): "
+                           "a: %g, b: %g, c: %g. sum: %g \n",
+                           id,
+                           lev,
+                           aa,
+                           bb,
+                           cc_s,
+                           sum);
+                }
+            }
+#endif // CHECK_THOR_VERTICAL_INT_THOMAS_DIAG_DOM
             dd[threadIdx.x * nvi + lev] = -C0;
             if (lev == 1) {
                 cc[threadIdx.x * nvi + 1] = cc[threadIdx.x * nvi + 1] / bb;
