@@ -74,9 +74,9 @@
 // Stability tests
 // test that matrix used in vertical implicit solver in thor_vertical_int.h is
 // diagonaly dominant
-#define CHECK_THOR_VERTICAL_INT_THOMAS_DIAG_DOM
+//#define CHECK_THOR_VERTICAL_INT_THOMAS_DIAG_DOM
 // magnitude factor mag for comparison in diagonal dominance
 // a_ii > mag * sum(a_ij, i!=j) 
-#define THOMAS_DIAG_DOM_FACTOR 1.0
+//#define THOMAS_DIAG_DOM_FACTOR 1.0
 
-#define CHECK_DENSITY_PRESSURE_EQ
+//#define CHECK_DENSITY_PRESSURE_EQ
