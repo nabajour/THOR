@@ -63,9 +63,9 @@
 // #define BENCH_COMPARE_EPSILON_VALUE 1e-7
 // ***************************************
 // * check for NaNs
-#define BENCH_NAN_CHECK
+// #define BENCH_NAN_CHECK
 // * below adds checks on device functions (useful for device memory bugs)
-#define BENCH_CHECK_LAST_CUDA_ERROR
+// #define BENCH_CHECK_LAST_CUDA_ERROR
 
 // path to benchmark result directory
 #define BENCHMARK_DUMP_REF_PATH "results/ref/"
@@ -74,9 +74,9 @@
 // Stability tests
 // test that matrix used in vertical implicit solver in thor_vertical_int.h is
 // diagonaly dominant
-//#define CHECK_THOR_VERTICAL_INT_THOMAS_DIAG_DOM
+// #define CHECK_THOR_VERTICAL_INT_THOMAS_DIAG_DOM
 // magnitude factor mag for comparison in diagonal dominance
 // a_ii > mag * sum(a_ij, i!=j) 
-//#define THOMAS_DIAG_DOM_FACTOR 1.0
+// #define THOMAS_DIAG_DOM_FACTOR 1.0
 
-//#define CHECK_DENSITY_PRESSURE_EQ
+#define CHECK_DENSITY_PRESSURE_EQ
