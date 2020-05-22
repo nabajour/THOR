@@ -46,7 +46,7 @@
 
 // benchmarking
 // if defined run benchmark functions?
-#define BENCHMARKING
+//#define BENCHMARKING
 
 // ***************************************
 // * binary comparison
@@ -80,3 +80,5 @@
 // #define THOMAS_DIAG_DOM_FACTOR 1.0
 
 #define CHECK_DENSITY_PRESSURE_EQ
+
+
