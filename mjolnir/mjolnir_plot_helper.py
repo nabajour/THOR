@@ -484,7 +484,7 @@ def make_plot(args, save=True, axis=None):
         output.load_reshape(grid,['Pressure','Rd','Rho'])
         z = {'value': output.Pressure / output.Rd / output.Rho, 'label': 'Temperature (K)', 'name': 'T'}
         # ham.TPprof(input,grid,output,sigmaref,1902)
-        pfile = call_plot('TP',ham.profile,input, grid, output, z, save=save, axis=axis)
+        pfile = call_plot('TP',ham.profile,input, grid, output, z, stride=20, save=save, axis=axis)
         plots_created.append(pfile)
 
     if 'PTP' in pview or 'all' in pview:
