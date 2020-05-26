@@ -298,7 +298,7 @@ int main(int argc, char** argv) {
 
     // Low pressure test
     bool   exit_on_low_pressure_warning = false;
-    double pressure_check_limit         = 1e-6;
+    double pressure_check_limit         = 1e-3;
     config_reader.append_config_var(
         "exit_on_low_pressure_warning", exit_on_low_pressure_warning, exit_on_low_pressure_warning);
     config_reader.append_config_var(
